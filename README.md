@@ -18,6 +18,7 @@ Kubernetes Persistent Volume Provisioner from pre-created snapshots.
 ## Supported cloud platforms:
 
 * "gcp" - Google Cloud Platform
+* "aws" - Amazon
 
 ### GCP Environment variables
 
