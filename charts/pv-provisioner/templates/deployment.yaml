@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "pv-provisioner.fullname" . }}
+  labels:
+    app: {{ template "pv-provisioner.name" . }}
+    chart: {{ template "pv-provisioner.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ template "pv-provisioner.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "pv-provisioner.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Values.rbac.serviceAccount | quote }}
+      automountServiceAccountToken: true
+      containers:
+      - name: {{ template "pv-provisioner.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        command: ["/usr/sbin/pv-provisioner", "-cloud={{ .Values.cloud }}"]
+        envFrom:
+        - secretRef:
+            name: {{ template "pv-provisioner.fullname" . }}-env
+        volumeMounts:
+        {{ if eq .Values.cloud "gcp" }}
+        - name: gcp-cred
+          mountPath: "/usr/local/etc"
+          readOnly: true
+        {{ end }}
+      volumes:
+      {{ if eq .Values.cloud "gcp" }}
+      - name: gcp-cred
+        secret:
+          secretName: {{ template "pv-provisioner.fullname" . }}-gcp-cred
+      {{ end }}

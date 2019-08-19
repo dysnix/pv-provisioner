@@ -1,0 +1,3 @@
+geth RPC can be accessed via port {{ .Values.rpcPort }} on the following DNS name from within your cluster:
+{{ include "geth-public.node.hostname" . }}
+

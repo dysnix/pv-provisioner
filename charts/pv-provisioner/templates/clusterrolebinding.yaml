@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+  labels:
+    app: {{ template "pv-provisioner.name" . }}
+    chart: {{ template "pv-provisioner.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: {{ .Values.rbac.сlusterRoleBinding | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.rbac.clusterRole | quote }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.rbac.serviceAccount | quote }}
+  namespace: default

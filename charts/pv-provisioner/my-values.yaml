@@ -1,0 +1,25 @@
+image:
+  repository: "asia.gcr.io/test-chainstack/pv-provisioner"
+  tag: "latest"
+  pullPolicy: Always
+
+rbac:
+  serviceAccount: "pv-provisioner"
+  clusterRole: "pv-provisioner"
+  clusterRoleBinding: "pv-provisioner"
+
+cloud: "aws"
+
+secret:
+  K8S_PERSISTENT_VOLUME_RECLAIM_POLICY: "Delete"
+  K8S_CLUSTER_NAME: "test-eu-01"
+  GCP_PROJECT: "test-chainstack"
+  GCP_ZONE: "asia-southeast1-a"
+  GCP_SNAPSHOT_LABEL: "app"
+  GOOGLE_APPLICATION_CREDENTIALS: "/usr/local/etc/gcp-cred.json"
+  AWS_ACCESS_KEY_ID: "AKIAJP2TSCYFSEEH7LJQ"
+  AWS_SECRET_ACCESS_KEY: "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"
+  AWS_REGION: "eu-central-1"
+  AWS_ZONE: "eu-central-1b"
+  AWS_VOLUME_TYPE: "gp2"
+  AWS_SNAPSHOT_LABEL: "app"

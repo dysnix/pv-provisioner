@@ -1,0 +1,12 @@
+name: pv-provisioner
+version: 0.0.1
+description: Persistent volume dynamic provisioner from disk snapshots
+keywords:
+- kubernetes
+- gcp
+sources:
+- https://git.arilot.com/chainstack/pv-provisioner
+maintainers:
+- name: yavorovych
+  email: daniel@yavorovych.com
+appVersion: v0.0.1

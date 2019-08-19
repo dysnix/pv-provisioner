@@ -1,0 +1,84 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "geth-public.fullname" . }}
+  labels:
+    app: {{ template "geth-public.name" . }}
+    chart: {{ template "geth-public.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: node
+    org: {{ .Values.organization.id }}
+    network: {{ .Values.network.id }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "geth-public.name" . }}
+      release: {{ .Release.Name }}
+      component: node
+      org: {{ .Values.organization.id }}
+      network: {{ .Values.network.id }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "geth-public.name" . }}
+        release: {{ .Release.Name }}
+        component: node
+        org: {{ .Values.organization.id }}
+        network: {{ .Values.network.id }}
+    spec:
+      initContainers:
+      - name: remove-lock
+        command:
+        - rm
+        - -f
+        - /root/.ethereum/geth/LOCK
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: data
+          mountPath: /root
+      containers:
+      - name: {{ template "geth-public.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{ if or (.Values.testnet) (.Values.rinkeby) -}}{{/* remove networkId */ -}}
+        command: ["/usr/local/bin/geth",{{ if .Values.testnet }} "--testnet",{{ end }}{{ if .Values.rinkeby }} "--rinkeby",{{ end }} "--syncmode", "{{ .Values.syncMode }}", "--rpc", "--rpcapi", "{{ .Values.apiMngt }}", "--rpcaddr", "0.0.0.0", "--rpcport", "{{ .Values.rpcPort }}", "--rpcvhosts", "{{ .Values.rpcVhosts }}", "--rpccorsdomain", "'*'", "--ws", "--wsaddr", "0.0.0.0", "--wsport", "{{ .Values.wsPort }}", "--wsapi", "{{ .Values.apiMngt }}", "--wsorigins", "{{ .Values.wsOrigins }}"{{ range $key, $val := .Values.customArgs }}, {{ printf "--%s" $key | quote }}{{ if $val }}, {{ $val | quote }}{{ end }}{{ end }}]
+        {{ else -}}
+        command: ["/usr/local/bin/geth", "--networkid", "{{ .Values.networkId }}", "--syncmode", "{{ .Values.syncMode }}", "--rpc", "--rpcapi", "{{ .Values.apiMngt }}", "--rpcaddr", "0.0.0.0", "--rpcport", "{{ .Values.rpcPort }}", "--rpcvhosts", "{{ .Values.rpcVhosts }}", "--rpccorsdomain='*'", "--ws", "--wsaddr", "0.0.0.0", "--wsport", "{{ .Values.wsPort }}", "--wsapi", "{{ .Values.apiMngt }}", "--wsorigins", "{{ .Values.wsOrigins }}"{{ range $key, $val := .Values.customArgs }}, {{ printf "--%s" $key | quote }}{{ if $val }}, {{ $val | quote }}{{ end }}{{ end }}]
+        {{ end -}}
+        resources:
+  {{ toYaml .Values.resources | indent 8 }}
+        ports:
+        - name: rpc
+          containerPort: {{ .Values.rpcPort }}
+        - name: ws
+          containerPort: {{ .Values.wsPort }}
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "echo -e 'POST / HTTP/1.1\nHost: localhost:8545\nUser-Agent: curl/7.61.1\nAccept: */*\nContent-Type: application/json\nContent-Length: 60\n\n{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":67}' | nc localhost 8545 | grep -q 'HTTP/1.1 200 OK' && echo -e 'GET / HTTP/1.1\nHost: localhost:8546\nUpgrade: websocket\nConnection: Upgrade\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\nSec-WebSocket-Version: 13\n' | nc localhost 8546 | grep -q 'HTTP/1.1 101'"
+          initialDelaySeconds: 120
+          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "echo -e 'POST / HTTP/1.1\nHost: localhost:8545\nUser-Agent: curl/7.61.1\nAccept: */*\nContent-Type: application/json\nContent-Length: 60\n\n{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":67}' | nc localhost 8545 | grep -q 'HTTP/1.1 200 OK' && echo -e 'GET / HTTP/1.1\nHost: localhost:8546\nUpgrade: websocket\nConnection: Upgrade\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\nSec-WebSocket-Version: 13\n' | nc localhost 8546 | grep -q 'HTTP/1.1 101'"
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 15
+        volumeMounts:
+        - name: data
+          mountPath: /root
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "geth-public.fullname" . }}
