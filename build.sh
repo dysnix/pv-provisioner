@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-docker build -t asia.gcr.io/test-chainstack/pv-provisioner ./
-docker push asia.gcr.io/test-chainstack/pv-provisioner
+docker build -t arilot/pv-provisioner ./
+docker push arilot/pv-provisioner
