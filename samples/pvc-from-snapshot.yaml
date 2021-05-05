@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: from-snapshot
   labels:
-    app: demo-pv-provisioner
+    snapshot: demo
 spec:
   storageClassName: "" # Empty string for use pv-provisioner
   accessModes:
