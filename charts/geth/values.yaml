@@ -55,8 +55,8 @@ ingress:
     - secret-ws.example.com
 
 persistence:
-  size: 10Gi
-  # storageClassName:
+  size: 100Gi
+  storageClassName: faster
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -107,6 +107,7 @@ readinessProbe:
 
 affinity: {}
 
-nodeSelector: {}
+nodeSelector:
+  beta.kubernetes.io/instance-type: n2d-standard-4
 
 tolerations: []

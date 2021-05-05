@@ -3,7 +3,7 @@
 ## Introduction
 
 This chart bootstraps a Persistent Volume Provisioner from Snapshots.
-You can get more information about pv-provisioner by https://git.arilot.com/chainstack/pv-provisioner
+You can get more information about pv-provisioner by https://git.dysnix.com/dysnix/pv-provisioner
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ You can get more information about pv-provisioner by https://git.arilot.com/chai
 3. Deploy helm chart
 
 ```console
-helm install ./
+helm install --name pv-provisioner ./
 ```
 
 ## Configuration

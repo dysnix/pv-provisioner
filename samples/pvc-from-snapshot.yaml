@@ -1,7 +1,14 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: standart
+  name: from-snapshot
+  labels:
+    app: demo-pv-provisioner
 spec:
-  storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumeName: foo-pv
+  storageClassName: "" # Empty string for use pv-provisioner
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
