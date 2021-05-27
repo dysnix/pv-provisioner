@@ -32,4 +32,5 @@ The following table lists the configurable parameters of the vault chart and the
 | `GCP_PROJECT`                     | Google Cloud Platform Project ID              |                                       |
 | `GCP_ZONE`                        | Availability zone of disks                    |                                       |
 | `GCP_SNAPSHOT_LABEL`              | Kubernetes Label name for search              | `app`                                 |
+| `GCP_DISK_TYPE`                   | Disk type resource describing which disk type to use to create the disk.              | `pd-ssd`                                 |
 

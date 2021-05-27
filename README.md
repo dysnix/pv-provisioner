@@ -14,13 +14,7 @@ Kubernetes Persistent Volume Provisioner from pre-created snapshots.
 
 ## Deploy
 
-* Create ServiceAccount
-* Generate json credential file and put to `/charts/pv-provisioner/gcp-cred.json`
-* Set helm values (GCP_PROJECT, GCP_ZONE, GCP_SNAPSHOT_LABEL, GCP_DISK_TYPE)
-
-Deploy pv-provisioner using helm:
-
-    helm install --name=pv-provisioner ./charts/pv-provisioner
+Please follow [charts/pv-provisioner/README.md](./charts/pv-provisioner/README.md)
 
 ## Supported cloud platforms:
 
