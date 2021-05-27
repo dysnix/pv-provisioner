@@ -4,16 +4,23 @@ Kubernetes Persistent Volume Provisioner from pre-created snapshots.
 
 ## How its works?
 
-* You create PersistentVolumeClaim with empty Storage class (for disable [Dynamic Provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/#enabling-dynamic-provisioning)
+* You create PersistentVolumeClaim with empty Storage class (for
+  disable [Dynamic Provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/#enabling-dynamic-provisioning)
 * _pv-provisioner_ detect PVC and track tag `app` value
 * _pv-provisioner_ search most actual snapshot with label `app` value equal `app` tag of k8s PVC
 * _pv-provisioner_ create new Disk/Volume
 * _pv-provisioner_ create new PersistentVolume with required params
 * PVC use created PV
 
-## Usage
+## Deploy
 
-    pv-provisioner -cloud <cloud>
+* Create ServiceAccount
+* Generate json credential file and put to `/charts/pv-provisioner/gcp-cred.json`
+* Set helm values (GCP_PROJECT, GCP_ZONE, GCP_SNAPSHOT_LABEL, GCP_DISK_TYPE)
+
+Deploy pv-provisioner using helm:
+
+    helm install --name=pv-provisioner ./charts/pv-provisioner
 
 ## Supported cloud platforms:
 
