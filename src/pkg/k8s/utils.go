@@ -38,7 +38,6 @@ type PersistentVolumeConfig struct {
 	Name             string
 	Namespace        string
 	PVSource         v1.PersistentVolumeSource
-	Prebind          *v1.PersistentVolumeClaim
 	ReclaimPolicy    v1.PersistentVolumeReclaimPolicy
 	NamePrefix       string
 	Labels           labels.Set
