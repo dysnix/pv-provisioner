@@ -24,7 +24,7 @@ Kubernetes Persistent Volume Provisioner from pre-created snapshots.
 * **GCP_PROJECT** - GCP project ID
 * **GCP_ZONE** - GCP Disks availability zone
 * **GCP_SNAPSHOT_LABEL** - tag name for find Snapshot
-* **GCP_DISK_TYPE_URL** - URL of the disk type resource describing which disk type to use to create the disk. Provide this when creating the disk. For example: projects/project/zones/zone/diskTypes/pd-standard or pd-ssd
+* **GCP_DISK_TYPE** - Disk type resource describing which disk type to use to create the disk. For example: `pd-ssd`
 
 ## TODO
 

@@ -52,10 +52,12 @@ func GetLatestSnapshot(ctx context.Context, svc *compute.Service, project string
 }
 
 func CreateGCPDisk(p VolumeParams) (compute.Disk, error) {
+	DiskTypeUrl := "projects/" + p.Project + "/zones/" + p.Zone + "/diskTypes/" + p.Type
+
 	disk := compute.Disk{
 		Name:   p.Name,
 		SizeGb: p.Size,
-		Type:   p.Type,
+		Type:   DiskTypeUrl,
 	}
 
 	if p.SourceSnapshot != "" {

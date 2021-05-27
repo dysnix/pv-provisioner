@@ -11,6 +11,8 @@ RUN go get -u k8s.io/client-go/...
 RUN go get -u golang.org/x/oauth2/google
 RUN go get -u google.golang.org/api/compute/v1
 RUN go get -u github.com/aws/aws-sdk-go/...
+RUN apk add --no-cache ca-certificates
+RUN update-ca-certificates
 
 ADD src /go/src/pv-provisioner/src
 WORKDIR /go/src/pv-provisioner/src
@@ -21,6 +23,8 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-w -s" -o /usr/sbin
 ############################
 FROM scratch
 
+# copy the ca-certificate.crt from the build stage
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/sbin/pv-provisioner /usr/sbin/pv-provisioner
 
 ENTRYPOINT ["/usr/sbin/pv-provisioner"]

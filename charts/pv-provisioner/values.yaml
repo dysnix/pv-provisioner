@@ -1,6 +1,6 @@
 image:
   repository: "dysnix/pv-provisioner"
-  tag: "latest"
+  tag: "v2"
   pullPolicy: Always
 
 rbac:
