@@ -124,6 +124,7 @@ func RunProcessor() {
 					createK8SPersistentVolumeParams := k8s.CreateVolumeRequest{
 						Clientset:        clientset,
 						PVName:           pvc.Name,
+						Namespace:        pvc.Namespace,
 						PDName:           disk.Name,
 						DiskSize:         GetDiskSize(disk.SizeGb),
 						K8SReclaimPolicy: K8SPersistentVolumeReclaimPolicy,

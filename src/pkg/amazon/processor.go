@@ -130,6 +130,7 @@ func RunProcessor() {
 					createK8SPersistentVolumeParams := k8s.CreateVolumeRequest{
 						Clientset:        clientset,
 						PVName:           pvName,
+						Namespace:        K8SNamespace,
 						Region:           AWSRegion,
 						Zone:             AWSZone,
 						DiskId:           *volume.VolumeId,

@@ -24,6 +24,7 @@ var ReclaimPolicies = map[string]v1.PersistentVolumeReclaimPolicy{
 type CreateVolumeRequest struct {
 	Clientset        clientset.Interface
 	PVName           string
+	Namespace        string
 	PDName           string
 	Region           string
 	Zone             string
@@ -35,6 +36,7 @@ type CreateVolumeRequest struct {
 
 type PersistentVolumeConfig struct {
 	Name             string
+	Namespace        string
 	PVSource         v1.PersistentVolumeSource
 	Prebind          *v1.PersistentVolumeClaim
 	ReclaimPolicy    v1.PersistentVolumeReclaimPolicy
@@ -61,11 +63,9 @@ func MakePersistentVolume(pvConfig PersistentVolumeConfig) *v1.PersistentVolume 
 		log.Printf("PV ReclaimPolicy unspecified, default: Retain")
 		pvConfig.ReclaimPolicy = v1.PersistentVolumeReclaimRetain
 	}
-	if pvConfig.Prebind != nil {
-		claimRef = &v1.ObjectReference{
-			Name:      pvConfig.Prebind.Name,
-			Namespace: pvConfig.Prebind.Namespace,
-		}
+	claimRef = &v1.ObjectReference{
+		Name:      pvConfig.Name,
+		Namespace: pvConfig.Namespace,
 	}
 	return &v1.PersistentVolume{
 		ObjectMeta: metav1.ObjectMeta{
@@ -97,7 +97,8 @@ func MakePersistentVolume(pvConfig PersistentVolumeConfig) *v1.PersistentVolume 
 
 func CreateGCPPersistentVolume(r CreateVolumeRequest) (*v1.PersistentVolume, error) {
 	pvConfig := PersistentVolumeConfig{
-		Name: r.PVName,
+		Name:      r.PVName,
+		Namespace: r.Namespace,
 		PVSource: v1.PersistentVolumeSource{
 			GCEPersistentDisk: &v1.GCEPersistentDiskVolumeSource{
 				PDName: r.PDName,
@@ -125,7 +126,8 @@ func CreateAWSPersistentVolume(r CreateVolumeRequest) (*v1.PersistentVolume, err
 	r.Labels["failure-domain.beta.kubernetes.io/zone"] = r.Zone
 
 	pvConfig := PersistentVolumeConfig{
-		Name: r.PVName,
+		Name:      r.PVName,
+		Namespace: r.Namespace,
 		PVSource: v1.PersistentVolumeSource{
 			AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{
 				VolumeID: getVolumeId(r.Zone, r.DiskId),
