@@ -1,6 +1,7 @@
 package amazon
 
 import (
+	"context"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -63,7 +64,7 @@ func RunProcessor() {
 
 	for {
 		listOptions := metav1.ListOptions{}
-		pvcs, err := clientset.CoreV1().PersistentVolumeClaims("").List(listOptions)
+		pvcs, err := clientset.CoreV1().PersistentVolumeClaims("").List(context.TODO(), listOptions)
 
 		if err != nil {
 			log.Print(err)
@@ -78,7 +79,7 @@ func RunProcessor() {
 				pvName := pvc.Name
 				K8SNamespace := pvc.Namespace
 
-				_, err = clientset.CoreV1().PersistentVolumes().Get(pvc.Name, metav1.GetOptions{})
+				_, err = clientset.CoreV1().PersistentVolumes().Get(context.TODO(), pvc.Name, metav1.GetOptions{})
 				if errors.IsNotFound(err) {
 					log.Printf("PV %s in namespace %s not found, finding snapshot...\n", pvName, K8SNamespace)
 

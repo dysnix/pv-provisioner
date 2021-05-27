@@ -1,4 +1,4 @@
-FROM golang:1.11.1-alpine3.7
+FROM golang:1.15.6-alpine
 ENV GOPATH "/go:/go/src/pv-provisioner"
 
 RUN apk --update add git openssh gcc make g++ pkgconfig zlib-dev bash

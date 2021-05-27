@@ -60,7 +60,7 @@ func RunProcessor() {
 
 	for {
 		listOptions := metav1.ListOptions{}
-		pvcs, err := clientset.CoreV1().PersistentVolumeClaims("").List(listOptions)
+		pvcs, err := clientset.CoreV1().PersistentVolumeClaims("").List(context.TODO(), listOptions)
 
 		if err != nil {
 			log.Print(err)
@@ -77,7 +77,7 @@ func RunProcessor() {
 					continue
 				}
 
-				_, err = clientset.CoreV1().PersistentVolumes().Get(pvc.Name, metav1.GetOptions{})
+				_, err = clientset.CoreV1().PersistentVolumes().Get(context.TODO(), pvc.Name, metav1.GetOptions{})
 
 				if errors.IsNotFound(err) {
 					log.Printf("PV for PVC %s in namespace %s not found, finding snapshot...\n", pvc.Name, pvc.Namespace)
