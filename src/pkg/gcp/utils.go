@@ -15,6 +15,7 @@ type VolumeParams struct {
 	Zone           string
 	Project        string
 	SourceSnapshot string
+	TypeURL        string
 	Size           int64
 }
 
@@ -54,6 +55,7 @@ func CreateGCPDisk(p VolumeParams) (compute.Disk, error) {
 	disk := compute.Disk{
 		Name:   p.Name,
 		SizeGb: p.Size,
+		Type:   p.TypeURL,
 	}
 
 	if p.SourceSnapshot != "" {

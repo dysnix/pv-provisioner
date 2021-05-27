@@ -72,7 +72,6 @@ func MakePersistentVolume(pvConfig PersistentVolumeConfig) *v1.PersistentVolume 
 			Labels:       pvConfig.Labels,
 			Annotations: map[string]string{
 				"kubernetes.io/createdby": K8SVolumeCreatedBy,
-				//"pv.kubernetes.io/provisioned-by": "kubernetes.io/aws-ebs",
 			},
 			Finalizers: []string{"kubernetes.io/pv-protection"},
 			Name:       pvConfig.Name,

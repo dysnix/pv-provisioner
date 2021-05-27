@@ -1,5 +1,5 @@
 image:
-  repository: "arilot/pv-provisioner"
+  repository: "dysnix/pv-provisioner"
   tag: "latest"
   pullPolicy: Always
 
@@ -12,8 +12,9 @@ cloud: "gcp"
 
 secret:
   K8S_PERSISTENT_VOLUME_RECLAIM_POLICY: "Delete"
-  K8S_CLUSTER_NAME: "demo-pv-provisioner"
-  GCP_PROJECT: "graceful-trees-256708"
-  GCP_ZONE: "europe-north1-a"
+  K8S_CLUSTER_NAME: ""
+  GCP_PROJECT: ""
+  GCP_ZONE: "asia-southeast1-c"
   GCP_SNAPSHOT_LABEL: "snapshot"
+  GCP_DISK_TYPE_URL: "projects/helix-dev-pancake/zones/asia-southeast1-c/diskTypes/pd-ssd"
   GOOGLE_APPLICATION_CREDENTIALS: "/usr/local/etc/gcp-cred.json"
