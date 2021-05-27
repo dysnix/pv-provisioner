@@ -23,14 +23,14 @@ func RunProcessor() {
 	const ProjectEnvName = "GCP_PROJECT"
 	const ZoneEnvName = "GCP_ZONE"
 	const SnapshotLabelEnvName = "GCP_SNAPSHOT_LABEL"
-	const GCPDiskTypeUrlEnvName = "GCP_DISK_TYPE_URL"
+	const GCPDiskTypeEnvName = "GCP_DISK_TYPE"
 
 	const K8SPersistentVolumeReclaimPolicyEnvName = "K8S_PERSISTENT_VOLUME_RECLAIM_POLICY"
 
 	var Project = env.GetEnvOrPanic(ProjectEnvName)
 	var GCPZone = env.GetEnvOrPanic(ZoneEnvName)
 	var GCPSnapshotLabel = env.GetEnvOrPanic(SnapshotLabelEnvName)
-	var GCPDiskTypeURL = env.GetEnvOrPanic(GCPDiskTypeUrlEnvName)
+	var GCPDiskType = env.GetEnvOrPanic(GCPDiskTypeEnvName)
 
 	var K8SPersistentVolumeReclaimPolicy = env.GetEnvOrPanic(K8SPersistentVolumeReclaimPolicyEnvName)
 
@@ -97,7 +97,7 @@ func RunProcessor() {
 						Project:        Project,
 						Name:           pvc.Name,
 						Size:           storageSizeInt,
-						TypeURL:        GCPDiskTypeURL,
+						Type:           GCPDiskType,
 						SourceSnapshot: "",
 					}
 
