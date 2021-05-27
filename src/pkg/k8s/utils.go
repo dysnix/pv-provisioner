@@ -13,7 +13,6 @@ import (
 
 const K8SVolumeFSType = "ext4"
 const K8SVolumeCreatedBy = "pv-provisioner"
-const K8SVolumeProvisionedBy = "dysnix.com/pv-provisioner"
 
 var ReclaimPolicies = map[string]v1.PersistentVolumeReclaimPolicy{
 	"Recycle": v1.PersistentVolumeReclaimRecycle,
@@ -71,8 +70,7 @@ func MakePersistentVolume(pvConfig PersistentVolumeConfig) *v1.PersistentVolume 
 			GenerateName: pvConfig.NamePrefix,
 			Labels:       pvConfig.Labels,
 			Annotations: map[string]string{
-				"kubernetes.io/createdby":         K8SVolumeCreatedBy,
-				"pv.kubernetes.io/provisioned-by": K8SVolumeProvisionedBy,
+				"kubernetes.io/createdby": K8SVolumeCreatedBy,
 			},
 			Finalizers: []string{"kubernetes.io/pv-protection"},
 			Name:       pvConfig.Name,
