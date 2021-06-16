@@ -15,4 +15,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ .Values.rbac.serviceAccount | quote }}
-  namespace: default
+  namespace: {{ .Release.Namespace }}

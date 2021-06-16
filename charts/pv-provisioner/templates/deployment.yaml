@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "pv-provisioner.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "pv-provisioner.name" . }}
     chart: {{ template "pv-provisioner.chart" . }}
@@ -31,13 +32,13 @@ spec:
         - secretRef:
             name: {{ template "pv-provisioner.fullname" . }}-env
         volumeMounts:
-        {{ if eq .Values.cloud "gcp" }}
+        {{ if .Values.secret.GOOGLE_APPLICATION_CREDENTIALS }}
         - name: gcp-cred
           mountPath: "/usr/local/etc"
           readOnly: true
         {{ end }}
       volumes:
-      {{ if eq .Values.cloud "gcp" }}
+      {{ if .Values.secret.GOOGLE_APPLICATION_CREDENTIALS }}
       - name: gcp-cred
         secret:
           secretName: {{ template "pv-provisioner.fullname" . }}-gcp-cred

@@ -7,6 +7,7 @@ rbac:
   serviceAccount: "pv-provisioner"
   clusterRole: "pv-provisioner"
   clusterRoleBinding: "pv-provisioner"
+  annotations: []
 
 cloud: "gcp"
 
@@ -17,4 +18,4 @@ secret:
   GCP_ZONE: ""
   GCP_SNAPSHOT_LABEL: "snapshot"
   GCP_DISK_TYPE: "pd-ssd"
-  GOOGLE_APPLICATION_CREDENTIALS: "/usr/local/etc/gcp-cred.json"
+  GOOGLE_APPLICATION_CREDENTIALS: ""
