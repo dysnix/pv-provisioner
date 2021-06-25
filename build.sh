@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-docker build -t arilot/pv-provisioner ./
-docker push arilot/pv-provisioner
+docker build -t dysnix/pv-provisioner ./
+docker push dysnix/pv-provisioner

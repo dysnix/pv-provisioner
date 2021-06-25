@@ -21,14 +21,14 @@ func RunProcessor() {
 	const WorkerSleepTimeout = 10
 
 	const ProjectEnvName = "GCP_PROJECT"
-	const ZoneEnvName = "GCP_ZONE"
+	const ZonesEnvName = "GCP_ZONES"
 	const SnapshotLabelEnvName = "GCP_SNAPSHOT_LABEL"
 	const GCPDiskTypeEnvName = "GCP_DISK_TYPE"
 
 	const K8SPersistentVolumeReclaimPolicyEnvName = "K8S_PERSISTENT_VOLUME_RECLAIM_POLICY"
 
 	var Project = env.GetEnvOrPanic(ProjectEnvName)
-	var GCPZone = env.GetEnvOrPanic(ZoneEnvName)
+	var GCPZones = env.GetEnvOrPanic(ZonesEnvName)
 	var GCPSnapshotLabel = env.GetEnvOrPanic(SnapshotLabelEnvName)
 	var GCPDiskType = env.GetEnvOrPanic(GCPDiskTypeEnvName)
 
@@ -93,7 +93,7 @@ func RunProcessor() {
 
 					createGCPVolumeParams := VolumeParams{
 						Svc:            svc,
-						Zone:           GCPZone,
+						Zone:           getRandomZone(GCPZones),
 						Project:        Project,
 						Name:           pvc.Name,
 						Size:           storageSizeInt,

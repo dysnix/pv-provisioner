@@ -6,6 +6,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -72,4 +73,23 @@ func CreateGCPDisk(p VolumeParams) (compute.Disk, error) {
 	log.Printf("Volume created: %v", result.Name)
 
 	return disk, nil
+}
+
+func getRandomOpt(opts []string) string {
+	len := len(opts)
+	n := uint32(0)
+	if len > 0 {
+		n = getRandomUint32() % uint32(len)
+	}
+	return opts[n]
+}
+
+func getRandomUint32() uint32 {
+	x := time.Now().UnixNano()
+	return uint32((x >> 32) ^ x)
+}
+
+func getRandomZone(zones_str string) string {
+	zones := strings.Split(zones_str, ",")
+	return getRandomOpt(zones)
 }
