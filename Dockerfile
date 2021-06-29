@@ -1,30 +1,55 @@
-################################
-# STEP 1 build executable binary
-################################
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-FROM golang:alpine AS builder
-ENV GOPATH "/go:/go/src/pv-provisioner"
+# Use the offical golang image to create a binary.
+# This is based on Debian and sets the GOPATH to /go.
+# https://hub.docker.com/_/golang
+FROM golang:1.16-buster as builder
 
-RUN apk --update add git openssh gcc make g++ pkgconfig zlib-dev bash
+# Create and change to the app directory.
+WORKDIR /app
 
-RUN go get -u k8s.io/client-go/...
-RUN go get -u golang.org/x/oauth2/google
-RUN go get -u google.golang.org/api/compute/v1
-RUN go get -u github.com/aws/aws-sdk-go/...
+# Retrieve application dependencies.
+# This allows the container build to reuse cached dependencies.
+# Expecting to copy go.mod and if present go.sum.
+COPY go.* ./
+RUN go mod download
+
+# Copy local code to the container image.
+COPY . ./
+
+# Build the binary.
+RUN CGO_ENABLED=0 go build -v -o server
+
+# Use a Docker multi-stage build to create a lean production image.
+# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
+FROM alpine:3
+
+# [START cloudrun_imageproc_dockerfile_imagemagick]
+# [START run_imageproc_dockerfile_imagemagick]
+
+#RUN apk add --no-cache it openssh gcc make g++ pkgconfig zlib-dev bash ca-certificates
+
+# [END run_imageproc_dockerfile_imagemagick]
+# [END cloudrun_imageproc_dockerfile_imagemagick]
+
+# Install certificates for secure communication with network services.
+# For production containers, a single RUN statement should install all system packages.
 RUN apk add --no-cache ca-certificates
-RUN update-ca-certificates
 
-ADD src /go/src/pv-provisioner/src
-WORKDIR /go/src/pv-provisioner/src
+# Copy the binary to the production image from the builder stage.
+COPY --from=builder /app/server .
 
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-w -s" -o /usr/sbin/pv-provisioner /go/src/pv-provisioner/src/cmd/pv-provisioner.go
-############################
-# STEP 2 build a small image
-############################
-FROM scratch
-
-# copy the ca-certificate.crt from the build stage
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /usr/sbin/pv-provisioner /usr/sbin/pv-provisioner
-
-ENTRYPOINT ["/usr/sbin/pv-provisioner"]
+# Run the web service on container startup.
+CMD ["/server"]
