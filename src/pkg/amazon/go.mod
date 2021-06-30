@@ -1,4 +1,4 @@
-module amazon
+module github.com/dysnix/pv-provisioner/src/pkg/amazon
 
 go 1.16
 

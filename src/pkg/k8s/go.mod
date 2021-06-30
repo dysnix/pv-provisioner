@@ -1,4 +1,4 @@
-module k8s
+module github.com/dysnix/pv-provisioner/src/pkg/k8s
 
 go 1.16
 

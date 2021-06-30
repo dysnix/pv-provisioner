@@ -1,4 +1,4 @@
-module gcp
+module github.com/dysnix/pv-provisioner/src/pkg/gcp
 
 go 1.16
 
