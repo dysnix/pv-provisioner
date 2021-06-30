@@ -89,7 +89,7 @@ func getRandomUint32() uint32 {
 	return uint32((x >> 32) ^ x)
 }
 
-func getRandomZone(zones_str string) string {
-	zones := strings.Split(zones_str, ",")
+func getRandomZone(zonesStr string) string {
+	zones := strings.Split(zonesStr, ",")
 	return getRandomOpt(zones)
 }
