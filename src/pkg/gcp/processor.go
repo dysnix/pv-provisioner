@@ -2,8 +2,6 @@ package gcp
 
 import (
 	"context"
-	"github.com/dysnix/pv-provisioner/pkg/env"
-	"github.com/dysnix/pv-provisioner/pkg/k8s"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/compute/v1"
 	"k8s.io/api/core/v1"
@@ -12,6 +10,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"log"
+	"pkg/env"
+	"pkg/k8s"
 	"strconv"
 	"strings"
 	"time"

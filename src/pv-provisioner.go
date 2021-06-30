@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/dysnix/pv-provisioner/pkg/amazon"
-	"github.com/dysnix/pv-provisioner/pkg/gcp"
+	"pv-provisioner/src/pkg/amazon"
+	"pv-provisioner/src/pkg/gcp"
 )
 
 const CloudNameAWS = "aws"
