@@ -1,3 +1,6 @@
+deployment:
+  annotations: []
+
 image:
   repository: "dysnix/pv-provisioner"
   tag: "latest"
