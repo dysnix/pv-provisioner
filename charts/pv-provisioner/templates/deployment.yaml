@@ -8,6 +8,10 @@ metadata:
     chart: {{ template "pv-provisioner.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  annotations:
+  {{- range $key, $value := .Values.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
 spec:
   strategy:
     type: Recreate
